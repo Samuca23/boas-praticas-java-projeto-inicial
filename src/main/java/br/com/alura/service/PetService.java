@@ -3,17 +3,10 @@ package br.com.alura.service;
 import br.com.alura.client.ClientHttpConfiguration;
 import br.com.alura.domain.Pet;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.List;
@@ -40,8 +33,16 @@ public class PetService {
         String responseBody = response.body();
         Pet[] pets = new ObjectMapper().readValue(responseBody, Pet[].class);
         List<Pet> petList = Arrays.stream(pets).toList();
+        if (petList.isEmpty()) {
+            System.out.println("Não há pets");
+        } else {
+            mostraPets(petList);
+        }
+    }
+
+    private void mostraPets(List<Pet> pets) {
         System.out.println("Pets cadastrados:");
-        for (Pet pet : petList) {
+        for (Pet pet : pets) {
             long id = pet.getId();
             String tipo = pet.getTipo();
             String nome = pet.getNome();
